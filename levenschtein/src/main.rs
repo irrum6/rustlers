@@ -5,7 +5,7 @@ fn min3(a:usize,b:usize,c:usize)->usize{
     return min;
 }
 
-fn distance(s1:String,s2:String)->usize{
+fn distance(s1:&str,s2:&str)->usize{
     use std::mem::swap;
 
     let str1:Vec<char> = s1.chars().collect();
@@ -39,10 +39,8 @@ fn distance(s1:String,s2:String)->usize{
     return v0[n];
 }
 #[test]
-fn kitten(){
-    let kitten = String::from("kitten");
-    let sitting = String::from("sitting");
-    let result:usize = distance(kitten,sitting);
+fn kitten(){    
+    let result:usize = distance("kitten","sitting");
     assert_eq!(result,3);
 }
 
@@ -52,8 +50,7 @@ fn main() {
     let args:Vec<String> = env::args().collect();
 
     if args.len()>2 {       
-        println!("distance is {}", distance(args[1].clone(),args[2].clone()));
-    }    
-
-    println!("Hello, world!");
+        println!("distance is {}", distance(&args[1],&args[2]));
+    }
+        
 }

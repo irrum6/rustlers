@@ -49,68 +49,54 @@ fn indexes(x:usize,y:usize,value:u32)->(usize,usize){
     normal_hop(x,y,value)
 }
 fn edge_hop(x:usize,y:usize,value:u32)->(usize,usize){
-    if x==0 {
-        if value > Values::TwoThirds as u32 {
-            return (0,y+1);
-        }else if value > Values::Third as u32{
-            return (0,y-1);
-        }else{
-            return (1,y);
-        }         
-    }    
-    if x==29 {
-        if value > Values::TwoThirds as u32 {
-            return (29,y+1);
-        }else if value > Values::Third as u32{
-            return (29,y-1);
-        }else{
-            return (28,y);
-        }         
-    }   
+    //additional safety
+    if (x==y && x==0)||(x==y && x==29)||(x==0 && y==29)|| (x==29 && y==0) {
+        return corner_hop(x,y,value);
+    }
+    //now with that
+    let mut xyz:[(usize,usize);3]=[(0,1),(0,0),(1,0)];
+
+    if x==0 || x==29 {
+        xyz[0] = (x,y+1);
+        xyz[1] = (x,y-1);
+        let subx = if x==0 {1}else{28};
+        xyz[2] = (subx,y);  
+    }
     
-    if y==0 {
-        if value > Values::TwoThirds as u32 {
-            return (x,1);
-        }else if value > Values::Third as u32{
-            return (x+1,0);
-        }else{
-            return (x-1,0);
-        }         
-    }else {
-        //y==29 implicit
-        if value > Values::TwoThirds as u32 {
-            return (x,28);
-        }else if value > Values::Third as u32{
-            return (x+1,29);
-        }else{
-            return (x-1,29);
-        }         
-    } 
+    if y==0 || y==29{
+        xyz[1] = (x+1,y);
+        xyz[2] = (x-1,y);
+        let suby= if y==0 {1}else{28};
+        xyz[0] = (x,suby);          
+    }
+    if value > Values::TwoThirds as u32 {
+        return xyz[0];
+    }
+    if value > Values::Third as u32{
+        return xyz[1];
+    }
+    return xyz[2]; 
 }
 fn corner_hop(x:usize,y:usize,value:u32)->(usize,usize){
-    if x==y && x==0 {
-        if value >Values::Half as u32 {
-            return (1,0)
-        }
-        return (0,1);
-    }
+    let mut xyz:[(usize,usize);2]=[(0,1),(1,0)];
+    
     if x==y && x==29 {
-        if value >Values::Half as u32 {
-            return (28,29);
-        }
-        return (29,28);
+        xyz[0] = (28,29);
+        xyz[1] = (29,28);
     }
     if x==0 && y==29 {
-        if value >Values::Half as u32 {
-            return (1,29);
-        }
-        return (0,28);
-    }else {
-        // x==29 && y==0 implicit
-        if value >Values::Half as u32 {
-            return (29,1)
-        }return (28,0);
+        xyz[0] = (1,29);
+        xyz[1] = (0,28);
     }
+    if x==29 && y==0 {
+        xyz[0] = (29,1);
+        xyz[1] = (28,0);
+    }
+
+    if value >Values::Half as u32 {
+        return xyz[0];
+    }
+    return xyz[1];
 }
 fn normal_hop(x:usize,y:usize,value:u32)->(usize,usize){
     if value > Values::ThreeQuarters as u32 {

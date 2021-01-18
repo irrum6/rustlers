@@ -111,14 +111,11 @@ fn normal_hop(x:usize,y:usize,value:u32)->(usize,usize){
     return (x,y-1);
 }
 
-fn main() {    
+fn single_round(mut xor:RNG)->(u32,RNG){
+    let count = 50;//50 bells
+
     let mut fleas_grid:[[u8;30];30] = [[1;30];30];
-    let mut xor = RNG::new();
-    xor.seed();
-
-    // 50 rounds
-    for _i in 1..=50 {
-
+    for _i in 1..=count {
         for i in 0..30{
             for j in 0..30 {
                 if fleas_grid[i][j]==0 {                
@@ -133,7 +130,6 @@ fn main() {
             }
         } 
     }
-
     let mut result = 0;
     for i in 0..30{
         for j in 0..30{
@@ -142,5 +138,29 @@ fn main() {
             }
         }
     }
-    println!("result is {}",result);
+    (result,xor)
+}
+
+fn main() {    
+    let mut xor = RNG::new();
+    xor.seed();
+    let count = 2000;
+    let mut result = 0;
+    let mut min = 900;
+    let mut max = 0;
+    //run for x times and count average
+    for _i in 1..=count {
+        let result_tuple = single_round(xor);
+        let zero = result_tuple.0;
+        result +=  zero;
+        if zero > max{
+            max = zero;
+        }
+        if zero < min{
+            min = zero;
+        }
+        // println!("iteration N{}:result is {}",_i, zero);
+        xor = result_tuple.1;
+    }
+    println!("min:{} , max:{}, average result is {}",min, max, result as f64 / count as f64);
 }

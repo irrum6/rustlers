@@ -86,7 +86,7 @@ fn bsearch2(arr:&[u32],n:usize,x:u32)->usize{
         }
         left = middle +1;
     }
-    return middle;
+    //return middle;
 }
 
 fn count_elements2(arr:&[u32],n:usize,x:u32)->u32{
@@ -141,6 +141,9 @@ fn threes() {
 }
 
 fn main() {
-      
-    println!("Hello, world!");
+    let xx:[u32;10] = [1,2,3,3,4,5,6,6,7,8];
+    println!("{}",linear_count( &xx,1));
+    println!("{}",count_elements( &xx,10,2));
+    println!("{}",count_elements2( &xx,10,3));
+    // println!("Hello, world!");
 }

@@ -15,6 +15,9 @@ fn td_bb(n:u64)->u64{
     loop {
         let mut p = true;
         for v in &primes {
+            if v*v > i {
+                break;
+            }
             if i%v == 0{
                 p = false;
                 break;
@@ -55,6 +58,9 @@ fn find_nth_prime(n:u64)->u64{
     loop {
         let mut p = true;
         for v in &primes {
+            if v*v > i {
+                break;
+            }
             if i%v == 0{
                 p = false;
                 break;
@@ -93,11 +99,11 @@ fn main() {
        return;
    }
    let num:u64 = args[2].trim().parse().expect("type a whole number");
-   if args[1]=="count" {
+   if args[1]=="count" ||args[1]=="N"{
        td_bb(num);
        return;
    }
-   if args[1] =="nth" {
+   if args[1] =="nth" || args[1]=="find"{
        let p = find_nth_prime(num);
        println!("N:{} prime is {}",num,p);
        return;

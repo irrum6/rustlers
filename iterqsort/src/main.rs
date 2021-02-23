@@ -58,9 +58,9 @@ fn test() {
     assert_eq!(xes[5],90);
 }
 fn main() {
-    let mut xes:[i32;8] = [10, 80, 30, 90, 40, 50, 20, 70];
+    let mut xes:[i32;12] = [10, 80, 30, 90, 40, 50, 20, 70,60,120,110,100];
 
-    iqsort(&mut xes,1,7);
+    iqsort(&mut xes,1,11);
 
     for x in xes.iter() {
         println!("x is {}", x);

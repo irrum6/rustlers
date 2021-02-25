@@ -1,30 +1,10 @@
 use std::env;
 use std::fs;
 
-fn parse_u64(s:&str)->u64{
-    let wasnt = "Parameter wasn't a number, oughta be";
-    return s.parse().expect(wasnt);
-}
-/**
- * Seek Forwad Find Duplicates
- */
-fn slash_forward_find_duplicates(arr:&Vec<u64>,i:usize,len:usize,v:u64)->u64{
-    let mut count = 0;
-    for j in i..len{
-        //println!("{}",arr[j]);
-        if arr[j] != v {
-            break;
-        }
-        count +=1;
-    }
-    return count;
-}
-fn dump_vec(v:&Vec<u64>){
-    for vv in v{
-        print!("{}-",vv);
-    }
-    print!("\n");
-}
+mod utils;
+use utils::dumb_shit as u;
+use u::parse_u64 as parse_u64;
+use u::slash_forward_find_duplicates as find_duplicates;
 /**
  * Select smallest element to eat, which in reverse sorted 
  * vector would be in the end of it
@@ -68,7 +48,7 @@ fn slash_forward_consoome(v:&mut Vec<u64>,j:usize,len:usize,valcomp:u64,self_cou
             //next smaller number
             //if number of duplicates equal  or less than duplicates of 
             //next smaller number, then eat it
-            let smallers = slash_forward_find_duplicates(&v, k, len, v[k]);
+            let smallers = find_duplicates(&v, k, len, v[k]);
             if smallers ==1 || self_count > smallers{
                 break;
             }
@@ -94,7 +74,7 @@ fn query(allnums:&mut Vec<u64>,valcmp:u64)->u64{
            if v[j] == 0 {
                continue;
            }           
-            let self_n = slash_forward_find_duplicates(&v, j, len, v[j]);
+            let self_n = find_duplicates(&v, j, len, v[j]);
             slash_forward_consoome(&mut v, j, len,  valcmp, self_n);
             eat_from_back(&mut v,j,len,valcmp);
        }

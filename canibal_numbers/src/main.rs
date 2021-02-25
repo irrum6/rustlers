@@ -25,7 +25,10 @@ fn dump_vec(v:&Vec<u64>){
     }
     print!("\n");
 }
-
+/**
+ * Select smallest element to eat, which in reverse sorted 
+ * vector would be in the end of it
+ */
 fn eat_from_back(v:&mut Vec<u64>,j:usize,len:usize,valcomp:u64){
     for m in (j..len).rev(){
         //dump_vec(&v);
@@ -42,9 +45,12 @@ fn eat_from_back(v:&mut Vec<u64>,j:usize,len:usize,valcomp:u64){
        }              
    }
 }
-
+/**
+ * for some cases is better to just move cursor forward
+ * and eat next smalles number
+ * this function does just that
+ */
 fn slash_forward_consoome(v:&mut Vec<u64>,j:usize,len:usize,valcomp:u64,self_count:u64){
-    //it stops if ate to the value or all elements were tried
     for k in j..len {
         if v[j] >= valcomp{
             break;
@@ -72,6 +78,42 @@ fn slash_forward_consoome(v:&mut Vec<u64>,j:usize,len:usize,valcomp:u64,self_cou
         }  
     }
 }
+/**
+ * Single query for single value
+ * move over vector and find how many numbers can gain weight
+ */
+fn query(allnums:&mut Vec<u64>,valcmp:u64)->u64{
+    let mut counter = 0;
+       let mut v = allnums.clone();
+       let len = v.len();
+       
+       for j in 0..len{
+           if v[j] >= valcmp{
+               continue;
+           }
+           if v[j] == 0 {
+               continue;
+           }           
+            let self_n = slash_forward_find_duplicates(&v, j, len, v[j]);
+            slash_forward_consoome(&mut v, j, len,  valcmp, self_n);
+            eat_from_back(&mut v,j,len,valcmp);
+       }
+       for w in v {
+           if w>=valcmp{
+               counter += 1;
+           }
+       }
+    return counter;
+}
+#[test]
+fn test_query() {
+    let mut data:Vec<u64> = vec![21, 9, 5, 8, 10, 1 ,3];
+    data.sort();
+    data.reverse();
+    let valcmp:u64 = 10;
+    let counter = query(&mut data,valcmp);
+    assert_eq!(4,counter);
+}
 
 fn main() {
     let args:Vec<String> = env::args().collect();
@@ -87,7 +129,7 @@ fn main() {
     let mut q:u64 = 0;
     let mut nums:Vec<u64> = Vec::new();
     let mut all_numbers:Vec<u64> = Vec::new();
-    let mut i=0;
+    let mut i = 0;
     
     for p in params {
         if i==0 {
@@ -109,26 +151,7 @@ fn main() {
     all_numbers.reverse();
 
     for i in 0..q{
-       let mut counter = 0;
-       let mut v = all_numbers.clone();
-       let len = v.len();
-       
-       for j in 0..len{
-           if v[j] >= nums[i as usize]{
-               continue;
-           }
-           if v[j] == 0 {
-               continue;
-           }           
-            let self_n = slash_forward_find_duplicates(&v, j, len, v[j]);
-            slash_forward_consoome(&mut v, j, len,  nums[i as usize], self_n);
-            eat_from_back(&mut v,j,len,nums[i as usize]);
-       }
-       for w in v {
-           if w>=nums[i as usize]{
-               counter += 1;
-           }
-       }
+       let counter = query(&mut all_numbers,nums[i as usize]);
        print!("{} ",counter);
     }
 }

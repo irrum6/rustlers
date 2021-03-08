@@ -26,7 +26,38 @@ fn wheel_buzz1 (num:u64)->u64{
     }
     return n;
 } 
+mod moditer;
+use moditer::it as it;
+use it::FizzBuzzWheel as FizzBuzzWheel;
+mod test;
+
 fn main() {
-    println!("Hello, world!");
-    wheel_buzz1(100);
+    use std::env;
+    let args:Vec<String> = env::args().collect();
+
+    if args.len() < 2{
+        wheel_buzz1(100);
+        return;
+    }
+    println!("Gela var, gelava!");
+    let num:u64 = args[1].trim().parse().expect("integer shall be");
+    //wheel_buzz1(num);
+
+    let w = FizzBuzzWheel::new(num);
+
+    for e in w{
+        if e%15==0 {
+            println!("FizzBuzz {}",e);
+            continue;
+        }
+        if e%3==0 {
+            println!("Fizz {}",e);
+            continue;
+        }
+        if e%5==0 {
+            println!("Buzz {}",e);
+            continue;
+        }
+    }
+    
 }

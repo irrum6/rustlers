@@ -11,7 +11,7 @@ pub mod tests{
     #[test]
     fn test_mass() {
         let s = Sphere::new(8.0);
-        let v = s.mass(7.84);
-        assert_eq!(v.round(),16814.0)
+        let m = s.mass(7.84);
+        assert_eq!(m.round(),16814.0)
     }
 }

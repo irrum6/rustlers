@@ -1,4 +1,4 @@
-// use std::env;
+use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
@@ -17,10 +17,10 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
-fn main() {
+fn ols(file:&str){
     let mut vec1: Vec<f64> = Vec::new();
     let mut vec2: Vec<f64> = Vec::new();
-    if let Ok(lines) = read_lines("data.md") {
+    if let Ok(lines) = read_lines(file) {
         // Consumes the iterator, returns an (Optional) String
         let mut i = 0;
         for line in lines {
@@ -33,7 +33,7 @@ fn main() {
                 let strong = ip.split(",");
 
                 for s in strong {
-                    let num = parse_float(s);
+                    let num = parse_float(s.trim());
                     if i == 3 {
                         vec1.push(num/1000.0);
                     }
@@ -57,11 +57,14 @@ fn main() {
 
         println!("R2- R კვადრატი ტოლია {}", sse / sst);
 
-        let mut y_hats: Vec<f64> = Vec::new();
-
-        for i in 0..vec1.len() {
-            let _y = b0 + b1 * vec1[i];
-            y_hats.push(_y);
-        }
     }
+}
+
+fn main() {    
+    let args:Vec<String> = env::args().collect();
+
+    if args.len()>1{
+        ols(&args[1]);
+    }
+    
 }

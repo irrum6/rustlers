@@ -2,11 +2,12 @@
 //http://stanleyrabinowitz.com/bibliography/spigot.pdf
 
 use std::time::Instant;
-fn main() {
-    const n: u64 = 100000;
-    const len: u64 = (10 * n) / 3;
 
-    let mut a: [u64; len as usize] = [2; len as usize];
+fn main() {
+    const N: u64 = 100000;
+    const LEN: u64 = (10 * N) / 3;
+
+    let mut a: [u64; LEN as usize] = [2; LEN as usize];
     let mut nines: u64 = 0;
     let mut predigit: u64 = 0;
 
@@ -14,9 +15,9 @@ fn main() {
     let mut q: u64 = 0; //quotient
 
     let before = Instant::now();
-    for j in 1..=n {
+    for j in 1..=N {
         q = 0;
-        for i in (1..len).rev() {
+        for i in (1..LEN).rev() {
             x = 10 * a[i as usize] + q * i as u64;
             a[i as usize] = x % (2 * i as u64 - 1);
             q = x / (2 * i as u64 - 1);

@@ -34,19 +34,18 @@ fn get_letter_sum(s: String) -> u32 {
     if s.len() == 0 {
         return 0;
     }
-    let mut value = 0;
-    for c in s.chars() {
-        value += get_letter_value(c);
-    }
-    return value;
+    // convert to char array
+    // map chars to integers
+    // fold(reduce) integer array to single value
+    return s
+        .chars()
+        .map(|e| get_letter_value(e))
+        .fold(0, |acc, x| acc + x);
 }
 
 use std::env;
 fn main() {
-    // let msg = "Hello, world!";
-    // println!("{}", get_letter_sum(String::from(msg)));
     let args: Vec<String> = env::args().collect();
-
     if args.len() > 1 {
         println!("{}", get_letter_sum(args[1].clone()));
     }

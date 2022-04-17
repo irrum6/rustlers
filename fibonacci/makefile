@@ -12,4 +12,8 @@ fast:
 	cargo clean;
 	cargo build;
 	cargo run < input.txt;
+fast2:
+	cargo clean;
+	cargo build;
+	cargo run < input2.txt;
 # expected output is 61537

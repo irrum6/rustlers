@@ -42,6 +42,22 @@ fn cater_fibonacci(n: usize) -> i64 {
     return a;
 }
 
+fn lucas(n: usize) -> i64 {
+    let precomputed = [2, 1, 3, 4];
+
+    if n < 5 && n > 0 {
+        return precomputed[n - 1];
+    }
+    let mut a = 4;
+    let mut b = 3;
+
+    for _i in 5..=n {
+        a = a + b;
+        b = a - b;
+    }
+    return a;
+}
+
 #[test]
 fn test() {
     //first 20 fibonaci numbers;
@@ -61,12 +77,23 @@ fn test() {
     assert_eq!(iter_fibonacci(20), 6765);
 }
 
+#[test]
+fn test_lukas() {
+    assert_eq!(lucas(6), 11);
+    assert_eq!(lucas(16), 1364);
+}
+
 fn main() {
     use std::io::stdin;
     let mut line = String::new();
     stdin().read_line(&mut line).unwrap();
+    if line.trim() == "b" {
+        line.truncate(0);
+        stdin().read_line(&mut line).unwrap();
+        let k: usize = line.trim().parse().expect("usize");
+        println!("{}th lucas number is {}", k, lucas(k));
+        return;
+    }
     let k: usize = line.trim().parse().expect("usize");
-
-    let fib = iter_fibonacci(k);
-    println!("Hello,{}th fibonacci number is {}", k, fib);
+    println!("{}th fibonacci number is {}", k, iter_fibonacci(k));
 }
